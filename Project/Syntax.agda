@@ -161,8 +161,10 @@ sestevanje-≡  {Γ} {η} (suc m) n =
                   begin
                     suc (prec (〚 numeral m 〛 η) (〚 numeral n 〛 η) (λ x1 x2 → suc x2))
                   ≡⟨  cong suc (sestevanje-≡ m n)  ⟩
-                  suc m + n
+                    suc m + n
                   ∎ 
+
+
 
 
 

@@ -63,19 +63,6 @@ plus : {Γ : Ctx'} → Γ ⊢ (Nat ⇒' (Nat ⇒' Nat))
 plus =  λ' ( λ' ( primrec (var ( ∈'-there ∈'-here ) ) ( var ( ∈'-here ) ) ( ( suc' ( var ( ∈'-here ) ) ) ) ) )
 
 
---primer: mnozenje
--- kontekst: poljuben
--- tip programa: Nat ⇒ Nat ⇒ Nat
-
--- koda: plus := (λ m . λ n . primrec m n (plus n n))
-
-pomozna :  {Γ : Ctx'} → Γ ⊢ (Nat ⇒' Nat)
-pomozna = λ' ( primrec zero' (var (∈'-here)) zero')
-
-krat : {Γ : Ctx'} → Γ ⊢ (Nat ⇒' (Nat ⇒' Nat))
-krat =  λ' ( λ' ( primrec ( var ( ∈'-there ∈'-here ) ) (var (∈'-here))  ( ( plus ·' (pomozna ·' ( var (∈'-here )  ) ) ) ·' ( ( var (∈'-here )  )  ) ) ) ) 
-
-
 prec : {A : Set} → ℕ → A → ( ℕ → A → A ) → A
 prec zero v w = v
 prec (suc n) v w = w n ( prec n v w )
@@ -103,6 +90,15 @@ prec (suc n) v w = w n ( prec n v w )
 〚 zero' 〛 y = zero
 〚 suc' x 〛 y = suc (〚 x 〛 y)
 〚 primrec n v w 〛 y =  ( prec ( 〚 n 〛 y ) ( 〚 v 〛 y ) (λ x1 → ( λ x2 → (〚 w 〛 ( (y , x1) , x2 ) ) ) ) )
+
+
+
+--primer: mnozenje
+-- kontekst: poljuben
+-- tip programa: Nat ⇒ Nat ⇒ Nat
+
+krat : {Γ : Ctx'} → Γ ⊢ (Nat ⇒' (Nat ⇒' Nat))
+krat =  λ' ( λ' ( primrec ( var ( ∈'-there ∈'-here ) ) zero' ( ( plus ·'  ( var (∈'-there (∈'-there ∈'-here ) ) ) ) ·' ( ( var (∈'-here )  )  ) ) ) )
 
 
 test : ● ⊢ Nat

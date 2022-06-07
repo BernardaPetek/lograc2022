@@ -109,7 +109,7 @@ numeral (suc n) = suc (numeral n)
 
 -- soundness proofs
 
---   primrec
+-- primitive recursion
 primrec-zero-≡ : ∀ {Γ : Ctx} {η : 〚 Γ 〛ᶜ} {A : Type} {e : Γ ⊢ A} {h : ((Γ ∷ Nat) ∷ A) ⊢ A} →
                  (〚 primrec zero e h 〛 η ) ≡ (〚 e  〛 η )
 primrec-zero-≡ {Γ} {η} {A} {e} {h} =

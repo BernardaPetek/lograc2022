@@ -191,7 +191,22 @@ snd-≡  {Γ} {η} {A} {e₁} {e₂} =
                             ≡⟨ refl  ⟩
                               〚 e₁ 〛 (η , 〚 e₂ 〛 η)
                             ∎
-  
-  
+
+
+
+
+-- examples of using the programs written in STLC
+example1 :  ∀ {Γ : Ctx} →  Γ ⊢ Nat
+example1 = add · (suc (suc (suc (suc zero)))) · (suc (suc (suc zero)))
+
+example1-≡ : ∀ {Γ : Ctx} {η : 〚 Γ 〛ᶜ} → 〚 example1 〛 η ≡ 7
+example1-≡ = refl
+
+example2 :  ∀ {Γ : Ctx} →  Γ ⊢ Nat
+example2 = mult · (suc (suc (suc (suc zero)))) · (suc (suc (suc zero)))
+
+example2-≡ : ∀ {Γ : Ctx} {η : 〚 Γ 〛ᶜ} → 〚 example2 〛 η ≡ 12
+example2-≡ = refl
+
 
 

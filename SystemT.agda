@@ -1,5 +1,5 @@
 module Project.Syntax where
-open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
+open import Data.Nat using (ℕ; zero; suc; _+_)
 open import Data.Unit using (⊤; tt)
 open import Data.Product using (_×_; proj₁; proj₂; _,_ )
 import Relation.Binary.PropositionalEquality as Eq
@@ -9,7 +9,7 @@ open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; step-≡; step-≡˘; _∎)
 infixr 20 _⇒_
 
 infixl 35 _·_
-infixl 30 _×'_
+infixl 30 _*_
 
 infix 15 _⊢_
 
@@ -18,7 +18,7 @@ data Type : Set where
   Nat : Type
   unit : Type
   _⇒_ : Type → Type → Type
-  _×'_ : Type → Type → Type
+  _*_ : Type → Type → Type
 
 -- Ctx are lists of types
 data Ctx : Set where
@@ -34,9 +34,9 @@ data _∈_ : Type → Ctx → Set where
 data _⊢_ (Γ : Ctx) : Type → Set where
   ⋆ : Γ ⊢ unit
   var : ∀ {A} → A ∈ Γ → Γ ⊢ A
-  ⟨_,_⟩ : ∀ {A B} → Γ ⊢ A → Γ ⊢ B → Γ ⊢ (A ×' B)
-  fst_ : ∀ {A B} → Γ ⊢ (A ×' B) → Γ ⊢ A
-  snd_ : ∀ {A B} → Γ ⊢ (A ×' B) → Γ ⊢ B
+  ⟨_,_⟩ : ∀ {A B} → Γ ⊢ A → Γ ⊢ B → Γ ⊢ (A * B)
+  fst_ : ∀ {A B} → Γ ⊢ (A * B) → Γ ⊢ A
+  snd_ : ∀ {A B} → Γ ⊢ (A * B) → Γ ⊢ B
   _·_ : ∀ {A B} → Γ ⊢ (A ⇒ B) → Γ ⊢ A → Γ ⊢ B
   fun : ∀ {A B} → (Γ ∷ A) ⊢ B → Γ ⊢ (A ⇒ B)
   zero : Γ ⊢ Nat
@@ -53,7 +53,7 @@ prec (suc n) v w = w n ( prec n v w )
 〚 Nat 〛ᵗ = ℕ
 〚 unit 〛ᵗ = ⊤
 〚 A ⇒ B 〛ᵗ = 〚 A 〛ᵗ → 〚 B 〛ᵗ
-〚 A ×' B 〛ᵗ = 〚 A 〛ᵗ × 〚 B 〛ᵗ
+〚 A * B 〛ᵗ = 〚 A 〛ᵗ × 〚 B 〛ᵗ
 
 -- mapping Ctx to Agda Types
 〚_〛ᶜ : Ctx → Set

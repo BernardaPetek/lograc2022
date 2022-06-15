@@ -25,10 +25,10 @@ data Ctx : Set where
   ● : Ctx
   _∷_ : Ctx → Type → Ctx
   
--- check and prove where the Type is in the Ctx
+-- check and prove where the Type A is in the Ctx Γ (all occurances)
 data _∈_ : Type → Ctx → Set where
-  ∈-here : {x : Type} → {xs : Ctx} → x ∈ (xs ∷ x)
-  ∈-there : {x y : Type} {xs : Ctx} → x ∈ xs → x ∈ (xs ∷ y)
+  ∈-here : {A : Type} → {Γ : Ctx} → A ∈ (Γ ∷ A)
+  ∈-there : {A B : Type} {Γ : Ctx} → A ∈ Γ → A ∈ (Γ ∷ B)
 
 -- Γ ⊢ A represents a term of type A in context Γ 
 data _⊢_ (Γ : Ctx) : Type → Set where
@@ -104,6 +104,24 @@ mult =  fun (
 numeral : ℕ → { Γ : Ctx } → Γ ⊢ Nat
 numeral zero = zero
 numeral (suc n) = suc (numeral n)
+
+-- example 1
+--   context: x₀ : Nat
+--   type: Nat × Nat ⇒ Nat × Nat
+--   output:  λ p . (x0, fst p)
+--
+--   Python code: lambda p: (x0,  p[0])
+example_fun_one : ● ∷ Nat ⊢ Nat * Nat ⇒ Nat * Nat
+example_fun_one = fun ⟨ (var (∈-there ∈-here)) , fst (var (∈-here)) ⟩
+
+-- example 2: adding two pairs
+--   context:  x₀ : Nat
+--   type:  (Nat × Nat) × (Nat × Nat) ⇒ Nat × Nat
+--   output:  λ p λ q . (fst p + fst q, snd p + snd q)
+--
+--   Python code: lambda p q: (p[0] + q[0],  p[1] + q[1])
+add-pairs : {Γ : Ctx} → Γ ⊢ (Nat * Nat) * (Nat * Nat) ⇒ Nat * Nat
+add-pairs = fun ⟨ add · ( fst ( fst ( var ( ∈-here ) ) ) ) · ( fst ( snd ( var ( ∈-here ) ) ) ) , add · ( snd ( fst ( var ( ∈-here ) ) ) ) ·  ( snd ( snd ( var ( ∈-here ) ) ) )  ⟩
 
 
 
@@ -207,6 +225,7 @@ example2 = mult · (suc (suc (suc (suc zero)))) · (suc (suc (suc zero)))
 
 example2-≡ : ∀ {Γ : Ctx} {η : 〚 Γ 〛ᶜ} → 〚 example2 〛 η ≡ 12
 example2-≡ = refl
+
 
 
 
